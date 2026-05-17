@@ -547,7 +547,7 @@
           <h1>Desafio Fitness Cardio</h1>
         </div>
         <div class="status" aria-live="polite">
-          <span class="pill" id="last-update">Atualizando...</span>
+          <span class="pill" id="last-update">Última atualização: --</span>
           <span class="pill" id="leader-name">Líder: --</span>
         </div>
       </header>
@@ -599,6 +599,28 @@
       const DATA_FILE = "dados.js";
       const REFRESH_SECONDS = 15;
       let lastSignature = "";
+
+      function formatDateTime(value) {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return "";
+        }
+
+        return new Intl.DateTimeFormat("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(date);
+      }
+
+      function renderLastUpdate(data) {
+        const formattedDate = formatDateTime(data.ultimaAtualizacao);
+        document.querySelector("#last-update").textContent = formattedDate
+          ? `Última atualização: ${formattedDate}`
+          : "Última atualização: --";
+      }
 
       function formatMinutes(minutes) {
         const safeMinutes = Number(minutes) || 0;
@@ -713,12 +735,7 @@
         document.querySelector("#leader-name").textContent = ranking[0]
           ? `Líder: ${ranking[0].nome}`
           : "Líder: --";
-        document.querySelector("#last-update").textContent =
-          `Atualizado ${new Date().toLocaleTimeString("pt-BR", {
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          })}`;
+        renderLastUpdate(data);
       }
 
       function loadData() {
@@ -737,13 +754,6 @@
           if (signature !== lastSignature) {
             lastSignature = signature;
             render(data);
-          } else {
-            document.querySelector("#last-update").textContent =
-              `Conferido ${new Date().toLocaleTimeString("pt-BR", {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              })}`;
           }
         };
         script.onerror = () => {
