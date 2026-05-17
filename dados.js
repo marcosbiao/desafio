@@ -15,6 +15,11 @@ window.desafioFitness = {
       nome: "Carla",
       foto: "",
     },
+    {
+      id: "luana",
+      nome: "Luana",
+      foto: "fotos/luana.jpg",
+    },
   ],
 
   // Preencha a tabela abaixo com o cardio feito por cada aluna.
@@ -25,5 +30,7 @@ window.desafioFitness = {
     { data: "2026-05-17", aluna: "carla", tempo: 50 },
     { data: "2026-05-18", aluna: "ana", tempo: 30 },
     { data: "2026-05-18", aluna: "beatriz", tempo: 55 },
+    { data: "2026-05-18", aluna: "luana", tempo: 45 },
+    { data: "2026-05-19", aluna: "luana", tempo: 55 },
   ],
 };
