@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Desafio Fitness | Placar Cardio</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #16211c;
+        --muted: #66726d;
+        --line: #dbe3df;
+        --paper: #fbfaf6;
+        --panel: #ffffff;
+        --mint: #62b990;
+        --mint-dark: #267458;
+        --rose: #e86f79;
+        --gold: #d99b2b;
+        --sky: #6aaed6;
+        --shadow: 0 18px 50px rgba(28, 46, 39, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 12% 10%, rgba(232, 111, 121, 0.16), transparent 28%),
+          radial-gradient(circle at 88% 4%, rgba(98, 185, 144, 0.2), transparent 30%),
+          linear-gradient(135deg, #fbfaf6 0%, #eef7f2 100%);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 40px;
+      }
+
+      .topbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 20px;
+        align-items: end;
+        margin-bottom: 24px;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: var(--mint-dark);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 760px;
+        font-size: clamp(2rem, 5vw, 4.6rem);
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+
+      .status {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-end;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .pill {
+        display: inline-flex;
+        min-height: 36px;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.78);
+        padding: 8px 12px;
+        box-shadow: 0 8px 22px rgba(42, 65, 56, 0.07);
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 330px;
+        gap: 20px;
+        align-items: start;
+      }
+
+      .ranking {
+        display: grid;
+        gap: 12px;
+      }
+
+      .leader {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: center;
+        border: 1px solid rgba(38, 116, 88, 0.24);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.88);
+        padding: 14px;
+        box-shadow: var(--shadow);
+      }
+
+      .leader:first-child {
+        border-color: rgba(217, 155, 43, 0.55);
+        background:
+          linear-gradient(90deg, rgba(217, 155, 43, 0.16), transparent 56%),
+          rgba(255, 255, 255, 0.94);
+      }
+
+      .position {
+        display: grid;
+        width: 46px;
+        height: 46px;
+        place-items: center;
+        border-radius: 50%;
+        background: var(--ink);
+        color: white;
+        font-weight: 900;
+      }
+
+      .leader:first-child .position {
+        background: var(--gold);
+      }
+
+      .photo {
+        width: 72px;
+        height: 72px;
+        flex: 0 0 auto;
+        overflow: hidden;
+        border: 3px solid white;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--mint), var(--sky));
+        box-shadow: 0 10px 25px rgba(22, 33, 28, 0.16);
+      }
+
+      .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .initials {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        place-items: center;
+        color: white;
+        font-size: 1.45rem;
+        font-weight: 900;
+      }
+
+      .person {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .name {
+        margin: 0 0 8px;
+        overflow: hidden;
+        font-size: clamp(1.15rem, 2vw, 1.55rem);
+        font-weight: 900;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .bar {
+        width: 100%;
+        height: 10px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: #e8eee9;
+      }
+
+      .bar span {
+        display: block;
+        width: var(--value);
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--mint-dark), var(--mint));
+      }
+
+      .total {
+        min-width: 116px;
+        text-align: right;
+      }
+
+      .minutes {
+        display: block;
+        font-size: clamp(1.35rem, 2.7vw, 2rem);
+        font-weight: 950;
+        line-height: 1;
+      }
+
+      .hours {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .side {
+        display: grid;
+        gap: 16px;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.82);
+        padding: 16px;
+        box-shadow: 0 12px 34px rgba(28, 46, 39, 0.09);
+      }
+
+      .panel h2 {
+        margin: 0 0 12px;
+        font-size: 1rem;
+      }
+
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .stat {
+        border: 1px solid #e7edea;
+        border-radius: 8px;
+        padding: 12px;
+      }
+
+      .stat b {
+        display: block;
+        font-size: 1.35rem;
+      }
+
+      .stat span {
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .log {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+
+      .log th,
+      .log td {
+        border-bottom: 1px solid #e7edea;
+        padding: 9px 4px;
+        text-align: left;
+      }
+
+      .log th:last-child,
+      .log td:last-child {
+        text-align: right;
+      }
+
+      .log th {
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .empty {
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        padding: 22px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 860px) {
+        .topbar,
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+
+        .status {
+          justify-content: flex-start;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .page {
+          width: min(100% - 22px, 1180px);
+          padding-top: 18px;
+        }
+
+        .leader {
+          grid-template-columns: auto minmax(0, 1fr);
+        }
+
+        .total {
+          grid-column: 2;
+          min-width: 0;
+          text-align: left;
+        }
+
+        .photo {
+          width: 58px;
+          height: 58px;
+        }
+
+        .person {
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Placar automático</p>
+          <h1>Desafio Fitness Cardio</h1>
+        </div>
+        <div class="status" aria-live="polite">
+          <span class="pill" id="last-update">Atualizando...</span>
+          <span class="pill" id="leader-name">Líder: --</span>
+        </div>
+      </header>
+
+      <section class="dashboard">
+        <div class="ranking" id="ranking"></div>
+
+        <aside class="side">
+          <section class="panel">
+            <h2>Resumo</h2>
+            <div class="stat-grid">
+              <div class="stat">
+                <b id="stat-students">0</b>
+                <span>alunas</span>
+              </div>
+              <div class="stat">
+                <b id="stat-total">0 min</b>
+                <span>cardio total</span>
+              </div>
+              <div class="stat">
+                <b id="stat-days">0</b>
+                <span>dias lançados</span>
+              </div>
+              <div class="stat">
+                <b id="stat-records">0</b>
+                <span>registros</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>Últimos lançamentos</h2>
+            <table class="log">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Aluna</th>
+                  <th>Tempo</th>
+                </tr>
+              </thead>
+              <tbody id="latest"></tbody>
+            </table>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <script>
+      const DATA_FILE = "dados.js";
+      const REFRESH_SECONDS = 15;
+      let lastSignature = "";
+
+      function formatMinutes(minutes) {
+        const safeMinutes = Number(minutes) || 0;
+        if (safeMinutes < 60) {
+          return `${safeMinutes} min`;
+        }
+
+        const hours = Math.floor(safeMinutes / 60);
+        const remaining = safeMinutes % 60;
+        return remaining ? `${hours}h ${remaining}min` : `${hours}h`;
+      }
+
+      function formatDate(value) {
+        const parts = String(value).split("-");
+        if (parts.length !== 3) {
+          return value;
+        }
+
+        return `${parts[2]}/${parts[1]}`;
+      }
+
+      function initials(name) {
+        return String(name)
+          .trim()
+          .split(/\s+/)
+          .slice(0, 2)
+          .map((part) => part[0])
+          .join("")
+          .toUpperCase();
+      }
+
+      function photoMarkup(aluna) {
+        if (aluna.foto) {
+          return `<img src="${aluna.foto}" alt="Foto de ${aluna.nome}">`;
+        }
+
+        return `<span class="initials">${initials(aluna.nome)}</span>`;
+      }
+
+      function buildRanking(data) {
+        const totals = new Map(data.alunas.map((aluna) => [aluna.id, 0]));
+
+        data.registros.forEach((record) => {
+          const current = totals.get(record.aluna) || 0;
+          totals.set(record.aluna, current + (Number(record.tempo) || 0));
+        });
+
+        return data.alunas
+          .map((aluna) => ({
+            ...aluna,
+            total: totals.get(aluna.id) || 0,
+          }))
+          .sort((a, b) => b.total - a.total || a.nome.localeCompare(b.nome, "pt-BR"));
+      }
+
+      function render(data) {
+        const ranking = buildRanking(data);
+        const highest = Math.max(...ranking.map((item) => item.total), 1);
+        const rankingElement = document.querySelector("#ranking");
+        const latestElement = document.querySelector("#latest");
+        const totalMinutes = ranking.reduce((sum, aluna) => sum + aluna.total, 0);
+        const days = new Set(data.registros.map((record) => record.data)).size;
+        const nameById = new Map(data.alunas.map((aluna) => [aluna.id, aluna.nome]));
+
+        if (!ranking.length) {
+          rankingElement.innerHTML = '<div class="empty">Cadastre as alunas no arquivo dados.js.</div>';
+        } else {
+          rankingElement.innerHTML = ranking
+            .map((aluna, index) => {
+              const percent = Math.max(4, Math.round((aluna.total / highest) * 100));
+
+              return `
+                <article class="leader">
+                  <div class="position">${index + 1}</div>
+                  <div class="person">
+                    <div class="photo">${photoMarkup(aluna)}</div>
+                    <div>
+                      <p class="name">${aluna.nome}</p>
+                      <div class="bar" aria-label="${aluna.nome}: ${aluna.total} minutos">
+                        <span style="--value: ${percent}%"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="total">
+                    <span class="minutes">${formatMinutes(aluna.total)}</span>
+                    <span class="hours">${aluna.total} minutos</span>
+                  </div>
+                </article>
+              `;
+            })
+            .join("");
+        }
+
+        latestElement.innerHTML = [...data.registros]
+          .sort((a, b) => String(b.data).localeCompare(String(a.data)))
+          .slice(0, 8)
+          .map(
+            (record) => `
+              <tr>
+                <td>${formatDate(record.data)}</td>
+                <td>${nameById.get(record.aluna) || record.aluna}</td>
+                <td>${formatMinutes(Number(record.tempo) || 0)}</td>
+              </tr>
+            `,
+          )
+          .join("");
+
+        document.querySelector("#stat-students").textContent = data.alunas.length;
+        document.querySelector("#stat-total").textContent = formatMinutes(totalMinutes);
+        document.querySelector("#stat-days").textContent = days;
+        document.querySelector("#stat-records").textContent = data.registros.length;
+        document.querySelector("#leader-name").textContent = ranking[0]
+          ? `Líder: ${ranking[0].nome}`
+          : "Líder: --";
+        document.querySelector("#last-update").textContent =
+          `Atualizado ${new Date().toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          })}`;
+      }
+
+      function loadData() {
+        const previousScript = document.querySelector("[data-score-data]");
+        if (previousScript) {
+          previousScript.remove();
+        }
+
+        const script = document.createElement("script");
+        script.src = `${DATA_FILE}?v=${Date.now()}`;
+        script.dataset.scoreData = "true";
+        script.onload = () => {
+          const data = window.desafioFitness || { alunas: [], registros: [] };
+          const signature = JSON.stringify(data);
+
+          if (signature !== lastSignature) {
+            lastSignature = signature;
+            render(data);
+          } else {
+            document.querySelector("#last-update").textContent =
+              `Conferido ${new Date().toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}`;
+          }
+        };
+        script.onerror = () => {
+          document.querySelector("#ranking").innerHTML =
+            '<div class="empty">Não consegui carregar o arquivo dados.js.</div>';
+        };
+        document.body.appendChild(script);
+      }
+
+      loadData();
+      window.setInterval(loadData, REFRESH_SECONDS * 1000);
+    </script>
+  </body>
+</html>
