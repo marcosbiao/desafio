@@ -598,14 +598,23 @@
     <script>
       const DATA_FILE = "dados.js";
       const REFRESH_SECONDS = 15;
+      const LAST_UPDATE = "2026-05-17T17:04:56";
       let lastSignature = "";
 
       function formatDateTime(value) {
+        const match = String(value || "").match(
+          /^(\d{4})-(\d{2})-(\d{2})(?:T|\s)(\d{2}):(\d{2})/,
+        );
+
+        if (match) {
+          const [, year, month, day, hour, minute] = match;
+          return `${day}/${month}/${year}, ${hour}:${minute}`;
+        }
+
         const date = new Date(value);
         if (Number.isNaN(date.getTime())) {
           return "";
         }
-
         return new Intl.DateTimeFormat("pt-BR", {
           day: "2-digit",
           month: "2-digit",
@@ -615,8 +624,8 @@
         }).format(date);
       }
 
-      function renderLastUpdate(data) {
-        const formattedDate = formatDateTime(data.ultimaAtualizacao);
+      function renderLastUpdate(data = {}) {
+        const formattedDate = formatDateTime(data.ultimaAtualizacao || LAST_UPDATE);
         document.querySelector("#last-update").textContent = formattedDate
           ? `Última atualização: ${formattedDate}`
           : "Última atualização: --";
@@ -735,7 +744,6 @@
         document.querySelector("#leader-name").textContent = ranking[0]
           ? `Líder: ${ranking[0].nome}`
           : "Líder: --";
-        renderLastUpdate(data);
       }
 
       function loadData() {
@@ -751,6 +759,8 @@
           const data = window.desafioFitness || { alunas: [], registros: [] };
           const signature = JSON.stringify(data);
 
+          renderLastUpdate(data);
+
           if (signature !== lastSignature) {
             lastSignature = signature;
             render(data);
@@ -763,6 +773,7 @@
         document.body.appendChild(script);
       }
 
+      renderLastUpdate();
       loadData();
       window.setInterval(loadData, REFRESH_SECONDS * 1000);
     </script>

@@ -1,4 +1,7 @@
 window.desafioFitness = {
+  // Atualize este campo quando subir uma nova versão ou novos lançamentos.
+  ultimaAtualizacao: "2026-05-17T17:04:56",
+
   alunas: [
     {
       id: "ana",
