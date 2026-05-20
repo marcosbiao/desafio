@@ -8,18 +8,14 @@ window.desafioFitness = {
     {
       id: "talita",
       nome: "Talita",
-      foto: "",
+      foto: "fotos/talita.jpeg",
     },
     {
       id: "laura",
       nome: "Laura",
       foto: "fotos/laura.jpeg",
     },
-    {
-      id: "luana",
-      nome: "Luana",
-      foto: "fotos/luana.jpg",
-    },
+    
   ],
 
   // Preencha a tabela abaixo com o cardio feito por cada aluna.
