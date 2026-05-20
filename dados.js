@@ -1,22 +1,19 @@
 window.desafioFitness = {
-  // Atualize este campo quando subir uma nova versão ou novos lançamentos.
-  ultimaAtualizacao: "2026-05-17T17:04:56",
-
   alunas: [
     {
-      id: "ana",
-      nome: "Ana",
+      id: "san",
+      nome: "Sanmile",
+      foto: "fotos/san.jpeg",
+    },
+    {
+      id: "talita",
+      nome: "Talita",
       foto: "",
     },
     {
-      id: "beatriz",
-      nome: "Beatriz",
-      foto: "",
-    },
-    {
-      id: "carla",
-      nome: "Carla",
-      foto: "",
+      id: "laura",
+      nome: "Laura",
+      foto: "fotos/laura.jpeg",
     },
     {
       id: "luana",
@@ -28,13 +25,13 @@ window.desafioFitness = {
   // Preencha a tabela abaixo com o cardio feito por cada aluna.
   // Use minutos no campo tempo. Exemplo: 45 para 45 minutos, 90 para 1h30.
   registros: [
-    { data: "2026-05-17", aluna: "ana", tempo: 40 },
-    { data: "2026-05-17", aluna: "beatriz", tempo: 35 },
-    { data: "2026-05-17", aluna: "carla", tempo: 50 },
-    { data: "2026-05-18", aluna: "ana", tempo: 30 },
-    { data: "2026-05-18", aluna: "beatriz", tempo: 55 },
-    { data: "2026-05-18", aluna: "luana", tempo: 45 },
-    { data: "2026-05-19", aluna: "luana", tempo: 55 },
-    { data: "2026-05-19", aluna: "luana", tempo: 30 },
+    { data: "2026-05-18", aluna: "san", tempo: 60 },
+    { data: "2026-05-19", aluna: "san", tempo: 30 },
+    { data: "2026-05-18", aluna: "talita", tempo: 60 },
+    { data: "2026-05-19", aluna: "talita", tempo: 40 },
+    { data: "2026-05-18", aluna: "laura", tempo: 30 },
+    { data: "2026-05-19", aluna: "laura", tempo: 45 },
+    
+    
   ],
 };
