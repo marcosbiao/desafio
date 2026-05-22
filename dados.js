@@ -27,7 +27,13 @@ window.desafioFitness = {
     { data: "2026-05-19", aluna: "talita", tempo: 40 },
     { data: "2026-05-18", aluna: "laura", tempo: 30 },
     { data: "2026-05-19", aluna: "laura", tempo: 45 },
-    
-    
+    { data: "2026-05-20", aluna: "san", tempo: 30 },
+    { data: "2026-05-21", aluna: "san", tempo: 60 },
+    { data: "2026-05-20", aluna: "talita", tempo: 60 },
+    { data: "2026-05-21", aluna: "talita", tempo: 56 },
+    { data: "2026-05-20", aluna: "laura", tempo: 30 },
+    { data: "2026-05-21", aluna: "laura", tempo: 45 },
+
+
   ],
 };
