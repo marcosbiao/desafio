@@ -725,7 +725,7 @@
 
         latestElement.innerHTML = [...data.registros]
           .sort((a, b) => String(b.data).localeCompare(String(a.data)))
-          .slice(0, 8)
+          .slice(0, 10)
           .map(
             (record) => `
               <tr>
