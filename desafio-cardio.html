@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Desafio Fitness | Placar Cardio</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #0d214f;
+        --muted: #66708a;
+        --line: #dce2ef;
+        --paper: #fbf8fc;
+        --panel: #ffffff;
+        --brand-pink: #e73e95;
+        --brand-navy: #0d214f;
+        --pink-soft: #ffd7eb;
+        --blue-soft: #dfe8ff;
+        --gold: #f2b94b;
+        --charcoal: #09142f;
+        --shadow: 0 28px 80px rgba(13, 33, 79, 0.2);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        position: relative;
+        margin: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        background: #fbf8fc;
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+      }
+
+      body::before,
+      body::after {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        pointer-events: none;
+        content: "";
+      }
+
+      body::before {
+        background:
+          linear-gradient(112deg, rgba(13, 33, 79, 0.98) 0 24%, transparent 24% 100%),
+          linear-gradient(112deg, transparent 0 47%, rgba(231, 62, 149, 0.2) 47% 62%, transparent 62%),
+          linear-gradient(112deg, transparent 0 70%, rgba(13, 33, 79, 0.16) 70% 83%, transparent 83%),
+          linear-gradient(150deg, rgba(231, 62, 149, 0.16) 0 12%, transparent 12% 100%),
+          linear-gradient(28deg, transparent 0 66%, rgba(13, 33, 79, 0.12) 66% 78%, transparent 78%),
+          repeating-linear-gradient(
+            118deg,
+            rgba(13, 33, 79, 0.06) 0 1px,
+            transparent 1px 24px
+          ),
+          linear-gradient(180deg, #fbf8fc 0%, #eef3ff 42%, #fff1f8 100%);
+      }
+
+      body::after {
+        z-index: -1;
+        opacity: 1;
+        background:
+          linear-gradient(90deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.74)),
+          repeating-linear-gradient(
+            90deg,
+            transparent 0 86px,
+            rgba(13, 33, 79, 0.1) 86px 88px,
+            transparent 88px 172px
+          );
+        clip-path: polygon(0 0, 100% 0, 100% 46%, 0 72%);
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .page {
+        position: relative;
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 48px;
+      }
+
+      .page::before {
+        position: absolute;
+        top: 34px;
+        right: clamp(-130px, -9vw, -18px);
+        z-index: -1;
+        width: min(560px, 56vw);
+        height: 320px;
+        background:
+          linear-gradient(118deg, transparent 0 34%, rgba(255, 255, 255, 0.76) 34% 46%, transparent 46%),
+          linear-gradient(118deg, transparent 0 56%, rgba(231, 62, 149, 0.24) 56% 63%, transparent 63%),
+          repeating-linear-gradient(
+            118deg,
+            rgba(13, 33, 79, 0.18) 0 2px,
+            transparent 2px 16px
+          );
+        transform: skewX(-12deg);
+        content: "";
+      }
+
+      .page::after {
+        position: absolute;
+        top: 96px;
+        left: clamp(-90px, -8vw, -18px);
+        z-index: -1;
+        width: min(340px, 44vw);
+        height: 560px;
+        border: 1px solid rgba(231, 62, 149, 0.2);
+        background:
+          linear-gradient(180deg, rgba(231, 62, 149, 0.14), transparent 58%),
+          repeating-linear-gradient(
+            0deg,
+            rgba(13, 33, 79, 0.055) 0 2px,
+            transparent 2px 42px
+          );
+        transform: skewY(-12deg);
+        content: "";
+      }
+
+      .topbar {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 20px;
+        align-items: end;
+        margin-bottom: 28px;
+        min-height: 230px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 8px;
+        background:
+          linear-gradient(118deg, rgba(13, 33, 79, 0.98), rgba(16, 44, 104, 0.96) 56%, rgba(231, 62, 149, 0.88)),
+          linear-gradient(28deg, transparent 0 62%, rgba(231, 62, 149, 0.34) 62% 78%, transparent 78%),
+          repeating-linear-gradient(118deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 18px);
+        padding: clamp(22px, 4vw, 38px);
+        box-shadow: 0 34px 100px rgba(13, 33, 79, 0.28);
+        overflow: hidden;
+        backdrop-filter: blur(14px);
+      }
+
+      .topbar::before {
+        position: absolute;
+        top: auto;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(90deg, var(--brand-pink), var(--gold), #ffffff, var(--brand-navy));
+        content: "";
+      }
+
+      .topbar::after {
+        position: absolute;
+        right: clamp(18px, 4vw, 48px);
+        bottom: clamp(16px, 3vw, 34px);
+        width: min(300px, 32vw);
+        height: min(244px, 26vw);
+        background: url("fotos/logo.png") center / contain no-repeat;
+        filter: brightness(0) invert(1);
+        opacity: 0.1;
+        content: "";
+      }
+
+      .topbar > div {
+        position: relative;
+        z-index: 1;
+      }
+
+      .eyebrow {
+        margin: 0 0 8px;
+        color: #ffd7eb;
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .home-link {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        width: fit-content;
+        min-height: 34px;
+        align-items: center;
+        margin-bottom: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.42);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        padding: 7px 12px;
+        color: #ffffff;
+        font-size: 0.84rem;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      h1 {
+        margin: 0;
+        max-width: 760px;
+        color: #ffffff;
+        font-size: clamp(2.45rem, 6.8vw, 6.4rem);
+        line-height: 0.95;
+        letter-spacing: 0;
+        text-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+        text-wrap: balance;
+      }
+
+      .status {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: flex-end;
+        color: var(--muted);
+        font-size: 0.92rem;
+      }
+
+      .pill {
+        position: relative;
+        display: inline-flex;
+        min-height: 36px;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+        padding: 9px 13px;
+        box-shadow: 0 14px 34px rgba(13, 33, 79, 0.16);
+        font-weight: 800;
+      }
+
+      .pill::before {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--brand-pink);
+        box-shadow: 0 0 0 5px rgba(231, 62, 149, 0.16);
+        content: "";
+      }
+
+      .dashboard {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 350px;
+        gap: 24px;
+        align-items: start;
+      }
+
+      .ranking {
+        display: grid;
+        gap: 14px;
+      }
+
+      .leader {
+        backdrop-filter: blur(10px);
+        position: relative;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        border-radius: 8px;
+        background:
+          linear-gradient(100deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.84)),
+          linear-gradient(90deg, rgba(231, 62, 149, 0.1), transparent 46%);
+        padding: 16px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .leader:first-child {
+        border-color: rgba(217, 155, 43, 0.7);
+        background:
+          linear-gradient(105deg, rgba(13, 33, 79, 0.98), rgba(14, 42, 98, 0.97) 58%, rgba(231, 62, 149, 0.86)),
+          linear-gradient(270deg, rgba(231, 62, 149, 0.18), transparent 42%),
+          repeating-linear-gradient(118deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 18px);
+        padding-block: 28px;
+        box-shadow:
+          0 0 0 3px rgba(242, 185, 75, 0.34),
+          0 28px 88px rgba(231, 62, 149, 0.24),
+          0 20px 60px rgba(13, 33, 79, 0.18);
+      }
+
+      .leader:first-child::after {
+        position: absolute;
+        top: 16px;
+        right: 18px;
+        border-radius: 999px;
+        background: rgba(242, 185, 75, 0.18);
+        color: #ffd36a;
+        padding: 7px 12px;
+        font-size: 0.75rem;
+        font-weight: 950;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        content: "Vencedora";
+      }
+
+      .leader::before {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 6px;
+        background: linear-gradient(180deg, var(--brand-navy), var(--brand-pink));
+        content: "";
+      }
+
+      .leader:first-child::before {
+        background: linear-gradient(180deg, var(--gold), var(--brand-pink));
+      }
+
+      .leader:first-child .name::after {
+        display: inline-flex;
+        margin-left: 10px;
+        border-radius: 999px;
+        background: rgba(242, 185, 75, 0.2);
+        color: #ffd36a;
+        padding: 5px 9px;
+        vertical-align: middle;
+        font-size: 0.72rem;
+        font-weight: 950;
+        content: "Campeã";
+      }
+
+      .leader:first-child .name,
+      .leader:first-child .hours {
+        color: #ffffff;
+      }
+
+      .leader:first-child .minutes {
+        color: #ffd36a;
+        font-size: clamp(1.9rem, 3.7vw, 2.85rem);
+      }
+
+      .leader:first-child .bar {
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      .position {
+        display: grid;
+        width: 50px;
+        height: 50px;
+        place-items: center;
+        border-radius: 50%;
+        background: linear-gradient(145deg, #18336f, var(--brand-navy));
+        color: white;
+        font-weight: 900;
+        box-shadow: inset 0 -5px 12px rgba(0, 0, 0, 0.18);
+      }
+
+      .leader:first-child .position {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(145deg, var(--gold), var(--brand-pink));
+        color: #ffffff;
+        font-size: 1.35rem;
+        box-shadow:
+          inset 0 -5px 12px rgba(0, 0, 0, 0.18),
+          0 0 0 7px rgba(242, 185, 75, 0.18);
+      }
+
+      .leader:first-child .photo {
+        width: 118px;
+        height: 118px;
+        border-color: #ffd36a;
+        box-shadow:
+          0 18px 42px rgba(0, 0, 0, 0.22),
+          0 0 0 8px rgba(242, 185, 75, 0.2);
+      }
+
+      .photo {
+        width: 96px;
+        height: 96px;
+        flex: 0 0 auto;
+        overflow: hidden;
+        border: 3px solid white;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--brand-pink), var(--brand-navy));
+        box-shadow:
+          0 12px 28px rgba(13, 33, 79, 0.18),
+          0 0 0 6px rgba(255, 255, 255, 0.45);
+      }
+
+      .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .initials {
+        display: grid;
+        width: 100%;
+        height: 100%;
+        place-items: center;
+        color: white;
+        font-size: 1.45rem;
+        font-weight: 900;
+      }
+
+      .person {
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .name {
+        margin: 0 0 8px;
+        overflow: hidden;
+        font-size: clamp(1.15rem, 2vw, 1.55rem);
+        font-weight: 900;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .leader:first-child .name {
+        font-size: clamp(1.65rem, 3.4vw, 2.55rem);
+        white-space: normal;
+      }
+
+      .bar {
+        width: 100%;
+        height: 13px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(13, 33, 79, 0.09);
+        box-shadow: inset 0 1px 3px rgba(13, 33, 79, 0.12);
+      }
+
+      .bar span {
+        display: block;
+        width: var(--value);
+        height: 100%;
+        border-radius: inherit;
+        background:
+          linear-gradient(90deg, rgba(255, 255, 255, 0.34), transparent 34%),
+          linear-gradient(90deg, var(--brand-navy), var(--brand-pink), #ff8cc4);
+        box-shadow: 0 8px 16px rgba(231, 62, 149, 0.2);
+      }
+
+      .total {
+        position: relative;
+        z-index: 1;
+        min-width: 128px;
+        text-align: right;
+      }
+
+      .minutes {
+        display: block;
+        font-size: clamp(1.55rem, 3vw, 2.35rem);
+        font-weight: 950;
+        line-height: 1;
+      }
+
+      .hours {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .side {
+        display: grid;
+        gap: 16px;
+      }
+
+      .panel {
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.76);
+        border-radius: 8px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.78)),
+          linear-gradient(140deg, rgba(231, 62, 149, 0.1), transparent 56%);
+        padding: 18px;
+        box-shadow: 0 18px 46px rgba(13, 33, 79, 0.12);
+      }
+
+      .panel h2 {
+        margin: 0 0 12px;
+        font-size: 1rem;
+      }
+
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .stat {
+        border: 1px solid rgba(13, 33, 79, 0.12);
+        border-radius: 8px;
+        background:
+          linear-gradient(135deg, rgba(231, 62, 149, 0.14), transparent 58%),
+          rgba(255, 255, 255, 0.66);
+        padding: 14px;
+      }
+
+      .stat b {
+        display: block;
+        color: var(--brand-navy);
+        font-size: 1.55rem;
+        line-height: 1;
+      }
+
+      .stat span {
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+
+      .log {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+      }
+
+      .log th,
+      .log td {
+        border-bottom: 1px solid rgba(13, 33, 79, 0.12);
+        padding: 9px 4px;
+        text-align: left;
+      }
+
+      .log th:last-child,
+      .log td:last-child {
+        text-align: right;
+      }
+
+      .log th {
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .empty {
+        border: 1px dashed var(--line);
+        border-radius: 8px;
+        padding: 22px;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 860px) {
+        .topbar,
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+
+        .status {
+          justify-content: flex-start;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .page {
+          width: min(100% - 22px, 1180px);
+          padding-top: 18px;
+        }
+
+        .leader {
+          grid-template-columns: auto minmax(0, 1fr);
+          gap: 12px;
+        }
+
+        .leader:first-child {
+          padding-top: 58px;
+        }
+
+        .leader:first-child::after {
+          top: 14px;
+          right: auto;
+          left: 16px;
+        }
+
+        .leader:first-child .position {
+          width: 56px;
+          height: 56px;
+          font-size: 1.2rem;
+        }
+
+        .total {
+          grid-column: 2;
+          min-width: 0;
+          text-align: left;
+        }
+
+        .photo {
+          width: 76px;
+          height: 76px;
+        }
+
+        .leader:first-child .photo {
+          width: 88px;
+          height: 88px;
+        }
+
+        .person {
+          gap: 10px;
+        }
+
+        .leader:first-child .name::after {
+          margin-left: 6px;
+          padding: 3px 7px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <a class="home-link" href="index.html">Voltar para desafios</a>
+          <p class="eyebrow">Desafio finalizado</p>
+          <h1>Desafio Fitness Cardio</h1>
+        </div>
+        <div class="status" aria-live="polite">
+          <span class="pill" id="last-update">Última atualização: --</span>
+          <span class="pill" id="leader-name">Vencedora: --</span>
+        </div>
+      </header>
+
+      <section class="dashboard">
+        <div class="ranking" id="ranking"></div>
+
+        <aside class="side">
+          <section class="panel">
+            <h2>Resumo</h2>
+            <div class="stat-grid">
+              <div class="stat">
+                <b id="stat-students">0</b>
+                <span>alunas</span>
+              </div>
+              <div class="stat">
+                <b id="stat-total">0 min</b>
+                <span>cardio total</span>
+              </div>
+              <div class="stat">
+                <b id="stat-days">0</b>
+                <span>dias lançados</span>
+              </div>
+              <div class="stat">
+                <b id="stat-records">0</b>
+                <span>registros</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h2>Últimos lançamentos</h2>
+            <table class="log">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Aluna</th>
+                  <th>Tempo</th>
+                </tr>
+              </thead>
+              <tbody id="latest"></tbody>
+            </table>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <script>
+      const DATA_FILE = "dados.js";
+      const REFRESH_SECONDS = 15;
+      const LAST_UPDATE = "2026-05-22T10:04:56";
+      let lastSignature = "";
+
+      function formatDateTime(value) {
+        const match = String(value || "").match(
+          /^(\d{4})-(\d{2})-(\d{2})(?:T|\s)(\d{2}):(\d{2})/,
+        );
+
+        if (match) {
+          const [, year, month, day, hour, minute] = match;
+          return `${day}/${month}/${year}, ${hour}:${minute}`;
+        }
+
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return "";
+        }
+        return new Intl.DateTimeFormat("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }).format(date);
+      }
+
+      function renderLastUpdate(data = {}) {
+        const formattedDate = formatDateTime(data.ultimaAtualizacao || LAST_UPDATE);
+        document.querySelector("#last-update").textContent = formattedDate
+          ? `Última atualização: ${formattedDate}`
+          : "Última atualização: --";
+      }
+
+      function formatMinutes(minutes) {
+        const safeMinutes = Number(minutes) || 0;
+        if (safeMinutes < 60) {
+          return `${safeMinutes} min`;
+        }
+
+        const hours = Math.floor(safeMinutes / 60);
+        const remaining = safeMinutes % 60;
+        return remaining ? `${hours}h ${remaining}min` : `${hours}h`;
+      }
+
+      function formatDate(value) {
+        const parts = String(value).split("-");
+        if (parts.length !== 3) {
+          return value;
+        }
+
+        return `${parts[2]}/${parts[1]}`;
+      }
+
+      function initials(name) {
+        return String(name)
+          .trim()
+          .split(/\s+/)
+          .slice(0, 2)
+          .map((part) => part[0])
+          .join("")
+          .toUpperCase();
+      }
+
+      function photoMarkup(aluna) {
+        if (aluna.foto) {
+          return `<img src="${aluna.foto}" alt="Foto de ${aluna.nome}">`;
+        }
+
+        return `<span class="initials">${initials(aluna.nome)}</span>`;
+      }
+
+      function buildRanking(data) {
+        const totals = new Map(data.alunas.map((aluna) => [aluna.id, 0]));
+
+        data.registros.forEach((record) => {
+          const current = totals.get(record.aluna) || 0;
+          totals.set(record.aluna, current + (Number(record.tempo) || 0));
+        });
+
+        return data.alunas
+          .map((aluna) => ({
+            ...aluna,
+            total: totals.get(aluna.id) || 0,
+          }))
+          .sort((a, b) => b.total - a.total || a.nome.localeCompare(b.nome, "pt-BR"));
+      }
+
+      function render(data) {
+        const ranking = buildRanking(data);
+        const highest = Math.max(...ranking.map((item) => item.total), 1);
+        const rankingElement = document.querySelector("#ranking");
+        const latestElement = document.querySelector("#latest");
+        const totalMinutes = ranking.reduce((sum, aluna) => sum + aluna.total, 0);
+        const days = new Set(data.registros.map((record) => record.data)).size;
+        const nameById = new Map(data.alunas.map((aluna) => [aluna.id, aluna.nome]));
+
+        if (!ranking.length) {
+          rankingElement.innerHTML = '<div class="empty">Cadastre as alunas no arquivo dados.js.</div>';
+        } else {
+          rankingElement.innerHTML = ranking
+            .map((aluna, index) => {
+              const percent = Math.max(4, Math.round((aluna.total / highest) * 100));
+
+              return `
+                <article class="leader">
+                  <div class="position">${index + 1}</div>
+                  <div class="person">
+                    <div class="photo">${photoMarkup(aluna)}</div>
+                    <div>
+                      <p class="name">${aluna.nome}</p>
+                      <div class="bar" aria-label="${aluna.nome}: ${aluna.total} minutos">
+                        <span style="--value: ${percent}%"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="total">
+                    <span class="minutes">${formatMinutes(aluna.total)}</span>
+                    <span class="hours">${aluna.total} minutos</span>
+                  </div>
+                </article>
+              `;
+            })
+            .join("");
+        }
+
+        latestElement.innerHTML = [...data.registros]
+          .sort((a, b) => String(b.data).localeCompare(String(a.data)))
+          .slice(0, 15)
+          .map(
+            (record) => `
+              <tr>
+                <td>${formatDate(record.data)}</td>
+                <td>${nameById.get(record.aluna) || record.aluna}</td>
+                <td>${formatMinutes(Number(record.tempo) || 0)}</td>
+              </tr>
+            `,
+          )
+          .join("");
+
+        document.querySelector("#stat-students").textContent = data.alunas.length;
+        document.querySelector("#stat-total").textContent = formatMinutes(totalMinutes);
+        document.querySelector("#stat-days").textContent = days;
+        document.querySelector("#stat-records").textContent = data.registros.length;
+        document.querySelector("#leader-name").textContent = ranking[0]
+          ? `Vencedora: ${ranking[0].nome}`
+          : "Vencedora: --";
+      }
+
+      function loadData() {
+        const previousScript = document.querySelector("[data-score-data]");
+        if (previousScript) {
+          previousScript.remove();
+        }
+
+        const script = document.createElement("script");
+        script.src = `${DATA_FILE}?v=${Date.now()}`;
+        script.dataset.scoreData = "true";
+        script.onload = () => {
+          const data = window.desafioFitness || { alunas: [], registros: [] };
+          const signature = JSON.stringify(data);
+
+          renderLastUpdate(data);
+
+          if (signature !== lastSignature) {
+            lastSignature = signature;
+            render(data);
+          }
+        };
+        script.onerror = () => {
+          document.querySelector("#ranking").innerHTML =
+            '<div class="empty">Não consegui carregar o arquivo dados.js.</div>';
+        };
+        document.body.appendChild(script);
+      }
+
+      renderLastUpdate();
+      loadData();
+      window.setInterval(loadData, REFRESH_SECONDS * 1000);
+    </script>
+  </body>
+</html>

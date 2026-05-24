@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Desafio Fitness | Placar Cardio</title>
+    <title>Desafios da Lulu</title>
     <style>
       :root {
         color-scheme: light;
@@ -17,7 +17,7 @@
         --pink-soft: #ffd7eb;
         --blue-soft: #dfe8ff;
         --gold: #f2b94b;
-        --charcoal: #09142f;
+        --green: #2f9f70;
         --shadow: 0 28px 80px rgba(13, 33, 79, 0.2);
       }
 
@@ -75,64 +75,20 @@
         clip-path: polygon(0 0, 100% 0, 100% 46%, 0 72%);
       }
 
-      button,
-      input {
-        font: inherit;
-      }
-
       .page {
-        position: relative;
         width: min(1180px, calc(100% - 32px));
         margin: 0 auto;
         padding: 32px 0 48px;
       }
 
-      .page::before {
-        position: absolute;
-        top: 34px;
-        right: clamp(-130px, -9vw, -18px);
-        z-index: -1;
-        width: min(560px, 56vw);
-        height: 320px;
-        background:
-          linear-gradient(118deg, transparent 0 34%, rgba(255, 255, 255, 0.76) 34% 46%, transparent 46%),
-          linear-gradient(118deg, transparent 0 56%, rgba(231, 62, 149, 0.24) 56% 63%, transparent 63%),
-          repeating-linear-gradient(
-            118deg,
-            rgba(13, 33, 79, 0.18) 0 2px,
-            transparent 2px 16px
-          );
-        transform: skewX(-12deg);
-        content: "";
-      }
-
-      .page::after {
-        position: absolute;
-        top: 96px;
-        left: clamp(-90px, -8vw, -18px);
-        z-index: -1;
-        width: min(340px, 44vw);
-        height: 560px;
-        border: 1px solid rgba(231, 62, 149, 0.2);
-        background:
-          linear-gradient(180deg, rgba(231, 62, 149, 0.14), transparent 58%),
-          repeating-linear-gradient(
-            0deg,
-            rgba(13, 33, 79, 0.055) 0 2px,
-            transparent 2px 42px
-          );
-        transform: skewY(-12deg);
-        content: "";
-      }
-
-      .topbar {
+      .hero {
         position: relative;
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
-        gap: 20px;
+        gap: 24px;
         align-items: end;
+        min-height: 260px;
         margin-bottom: 28px;
-        min-height: 230px;
         border: 1px solid rgba(255, 255, 255, 0.22);
         border-radius: 8px;
         background:
@@ -142,12 +98,10 @@
         padding: clamp(22px, 4vw, 38px);
         box-shadow: 0 34px 100px rgba(13, 33, 79, 0.28);
         overflow: hidden;
-        backdrop-filter: blur(14px);
       }
 
-      .topbar::before {
+      .hero::before {
         position: absolute;
-        top: auto;
         bottom: 0;
         left: 0;
         width: 100%;
@@ -156,7 +110,7 @@
         content: "";
       }
 
-      .topbar::after {
+      .hero::after {
         position: absolute;
         right: clamp(18px, 4vw, 48px);
         bottom: clamp(16px, 3vw, 34px);
@@ -168,7 +122,8 @@
         content: "";
       }
 
-      .topbar > div {
+      .hero-content,
+      .hero-photo {
         position: relative;
         z-index: 1;
       }
@@ -186,451 +141,270 @@
         margin: 0;
         max-width: 760px;
         color: #ffffff;
-        font-size: clamp(2.45rem, 6.8vw, 6.4rem);
+        font-size: clamp(2.75rem, 7.2vw, 6.8rem);
         line-height: 0.95;
         letter-spacing: 0;
         text-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
         text-wrap: balance;
       }
 
-      .status {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        justify-content: flex-end;
-        color: var(--muted);
-        font-size: 0.92rem;
+      .hero-copy {
+        max-width: 560px;
+        margin: 18px 0 0;
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 1rem;
+        line-height: 1.6;
       }
 
-      .pill {
-        position: relative;
-        display: inline-flex;
-        min-height: 36px;
-        align-items: center;
-        gap: 8px;
-        border: 1px solid rgba(255, 255, 255, 0.45);
+      .hero-photo {
+        width: clamp(128px, 18vw, 190px);
+        aspect-ratio: 1;
+        border: 4px solid rgba(255, 255, 255, 0.72);
+        border-radius: 50%;
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0)),
+          url("fotos/luana.jpg") center / cover no-repeat;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
+      }
+
+      .section {
+        margin-top: 26px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 14px;
+      }
+
+      h2 {
+        margin: 0;
+        color: var(--ink);
+        font-size: clamp(1.35rem, 3vw, 2rem);
+        letter-spacing: 0;
+      }
+
+      .count {
+        min-height: 34px;
+        border: 1px solid rgba(13, 33, 79, 0.1);
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.92);
-        padding: 9px 13px;
-        box-shadow: 0 14px 34px rgba(13, 33, 79, 0.16);
+        background: rgba(255, 255, 255, 0.8);
+        padding: 7px 12px;
+        color: var(--muted);
+        font-size: 0.84rem;
         font-weight: 800;
       }
 
-      .pill::before {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--brand-pink);
-        box-shadow: 0 0 0 5px rgba(231, 62, 149, 0.16);
-        content: "";
-      }
-
-      .dashboard {
+      .challenge-grid {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 350px;
-        gap: 24px;
-        align-items: start;
-      }
-
-      .ranking {
-        display: grid;
-        gap: 14px;
-      }
-
-      .leader {
-        backdrop-filter: blur(10px);
-        position: relative;
-        display: grid;
-        grid-template-columns: auto minmax(0, 1fr) auto;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
         gap: 16px;
-        align-items: center;
+      }
+
+      .challenge-card,
+      .empty {
         border: 1px solid rgba(255, 255, 255, 0.72);
         border-radius: 8px;
         background:
           linear-gradient(100deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.84)),
           linear-gradient(90deg, rgba(231, 62, 149, 0.1), transparent 46%);
-        padding: 16px;
         box-shadow: var(--shadow);
+      }
+
+      .challenge-card {
+        display: grid;
+        gap: 18px;
+        padding: 18px;
         overflow: hidden;
       }
 
-      .leader:first-child {
-        border-color: rgba(217, 155, 43, 0.7);
-        background:
-          linear-gradient(105deg, rgba(13, 33, 79, 0.98), rgba(14, 42, 98, 0.97) 58%, rgba(231, 62, 149, 0.86)),
-          linear-gradient(270deg, rgba(231, 62, 149, 0.18), transparent 42%),
-          repeating-linear-gradient(118deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 18px);
-        padding-block: 22px;
-        box-shadow:
-          0 28px 88px rgba(231, 62, 149, 0.24),
-          0 20px 60px rgba(13, 33, 79, 0.18);
-      }
-
-      .leader::before {
-        position: absolute;
-        inset: 0 auto 0 0;
-        width: 6px;
-        background: linear-gradient(180deg, var(--brand-navy), var(--brand-pink));
-        content: "";
-      }
-
-      .leader:first-child::before {
-        background: linear-gradient(180deg, var(--gold), var(--brand-pink));
-      }
-
-      .leader:first-child .name::after {
-        display: inline-flex;
-        margin-left: 10px;
-        border-radius: 999px;
-        background: rgba(231, 62, 149, 0.18);
-        color: var(--pink-soft);
-        padding: 4px 8px;
-        vertical-align: middle;
-        font-size: 0.68rem;
-        font-weight: 900;
-        content: "TOP 1";
-      }
-
-      .leader:first-child .name,
-      .leader:first-child .hours {
-        color: #ffffff;
-      }
-
-      .leader:first-child .minutes {
-        color: #ffd36a;
-      }
-
-      .leader:first-child .bar {
-        background: rgba(255, 255, 255, 0.22);
-      }
-
-      .position {
-        display: grid;
-        width: 50px;
-        height: 50px;
-        place-items: center;
-        border-radius: 50%;
-        background: linear-gradient(145deg, #18336f, var(--brand-navy));
-        color: white;
-        font-weight: 900;
-        box-shadow: inset 0 -5px 12px rgba(0, 0, 0, 0.18);
-      }
-
-      .leader:first-child .position {
-        background: linear-gradient(145deg, var(--brand-pink), #aa1f69);
-        color: #ffffff;
-      }
-
-      .photo {
-        width: 96px;
-        height: 96px;
-        flex: 0 0 auto;
-        overflow: hidden;
-        border: 3px solid white;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--brand-pink), var(--brand-navy));
-        box-shadow:
-          0 12px 28px rgba(13, 33, 79, 0.18),
-          0 0 0 6px rgba(255, 255, 255, 0.45);
-      }
-
-      .photo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-      }
-
-      .initials {
-        display: grid;
-        width: 100%;
-        height: 100%;
-        place-items: center;
-        color: white;
-        font-size: 1.45rem;
-        font-weight: 900;
-      }
-
-      .person {
+      .challenge-top {
         display: flex;
-        min-width: 0;
-        align-items: center;
+        align-items: start;
+        justify-content: space-between;
         gap: 14px;
       }
 
-      .name {
-        margin: 0 0 8px;
-        overflow: hidden;
-        font-size: clamp(1.15rem, 2vw, 1.55rem);
-        font-weight: 900;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      .challenge-card h3 {
+        margin: 0;
+        font-size: clamp(1.35rem, 3vw, 2.05rem);
+        line-height: 1.05;
+        letter-spacing: 0;
       }
 
-      .leader:first-child .name {
-        white-space: normal;
-      }
-
-      .bar {
-        width: 100%;
-        height: 13px;
-        overflow: hidden;
+      .badge {
+        flex: 0 0 auto;
         border-radius: 999px;
-        background: rgba(13, 33, 79, 0.09);
-        box-shadow: inset 0 1px 3px rgba(13, 33, 79, 0.12);
+        background: rgba(242, 185, 75, 0.2);
+        padding: 7px 10px;
+        color: #9a6511;
+        font-size: 0.74rem;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
       }
 
-      .bar span {
-        display: block;
-        width: var(--value);
-        height: 100%;
-        border-radius: inherit;
-        background:
-          linear-gradient(90deg, rgba(255, 255, 255, 0.34), transparent 34%),
-          linear-gradient(90deg, var(--brand-navy), var(--brand-pink), #ff8cc4);
-        box-shadow: 0 8px 16px rgba(231, 62, 149, 0.2);
-      }
-
-      .total {
-        position: relative;
-        z-index: 1;
-        min-width: 128px;
-        text-align: right;
-      }
-
-      .minutes {
-        display: block;
-        font-size: clamp(1.55rem, 3vw, 2.35rem);
-        font-weight: 950;
-        line-height: 1;
-      }
-
-      .hours {
-        display: block;
-        margin-top: 4px;
+      .challenge-card p {
+        margin: 0;
         color: var(--muted);
-        font-size: 0.88rem;
+        line-height: 1.55;
       }
 
-      .side {
+      .winner-line {
+        border-left: 4px solid var(--gold);
+        background: rgba(242, 185, 75, 0.12);
+        padding: 10px 12px;
+        color: var(--ink) !important;
+        font-weight: 950;
+      }
+
+      .stats {
         display: grid;
-        gap: 16px;
-      }
-
-      .panel {
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.76);
-        border-radius: 8px;
-        background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.78)),
-          linear-gradient(140deg, rgba(231, 62, 149, 0.1), transparent 56%);
-        padding: 18px;
-        box-shadow: 0 18px 46px rgba(13, 33, 79, 0.12);
-      }
-
-      .panel h2 {
-        margin: 0 0 12px;
-        font-size: 1rem;
-      }
-
-      .stat-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 10px;
       }
 
       .stat {
-        border: 1px solid rgba(13, 33, 79, 0.12);
+        min-width: 0;
+        border: 1px solid rgba(13, 33, 79, 0.08);
         border-radius: 8px;
-        background:
-          linear-gradient(135deg, rgba(231, 62, 149, 0.14), transparent 58%),
-          rgba(255, 255, 255, 0.66);
-        padding: 14px;
+        background: rgba(255, 255, 255, 0.74);
+        padding: 12px;
+      }
+
+      .stat b,
+      .stat span {
+        display: block;
       }
 
       .stat b {
-        display: block;
-        color: var(--brand-navy);
-        font-size: 1.55rem;
+        font-size: 1.35rem;
         line-height: 1;
       }
 
       .stat span {
+        margin-top: 6px;
         color: var(--muted);
-        font-size: 0.84rem;
-      }
-
-      .log {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.9rem;
-      }
-
-      .log th,
-      .log td {
-        border-bottom: 1px solid rgba(13, 33, 79, 0.12);
-        padding: 9px 4px;
-        text-align: left;
-      }
-
-      .log th:last-child,
-      .log td:last-child {
-        text-align: right;
-      }
-
-      .log th {
-        color: var(--muted);
-        font-size: 0.76rem;
+        font-size: 0.78rem;
         font-weight: 800;
-        text-transform: uppercase;
+      }
+
+      .open-link {
+        display: inline-flex;
+        width: fit-content;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--brand-navy), var(--brand-pink));
+        padding: 10px 16px;
+        color: #ffffff;
+        font-weight: 900;
+        text-decoration: none;
+        box-shadow: 0 16px 34px rgba(231, 62, 149, 0.24);
       }
 
       .empty {
-        border: 1px dashed var(--line);
-        border-radius: 8px;
         padding: 22px;
         color: var(--muted);
         text-align: center;
       }
 
-      @media (max-width: 860px) {
-        .topbar,
-        .dashboard {
+      @media (max-width: 760px) {
+        .hero {
           grid-template-columns: 1fr;
         }
 
-        .status {
-          justify-content: flex-start;
+        .hero-photo {
+          width: 120px;
+        }
+
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .section-head {
+          align-items: start;
+          flex-direction: column;
         }
       }
 
-      @media (max-width: 620px) {
+      @media (max-width: 460px) {
         .page {
           width: min(100% - 22px, 1180px);
           padding-top: 18px;
         }
 
-        .leader {
-          grid-template-columns: auto minmax(0, 1fr);
-          gap: 12px;
-        }
-
-        .total {
-          grid-column: 2;
-          min-width: 0;
-          text-align: left;
-        }
-
-        .photo {
-          width: 76px;
-          height: 76px;
-        }
-
-        .person {
-          gap: 10px;
-        }
-
-        .leader:first-child .name::after {
-          margin-left: 6px;
-          padding: 3px 7px;
+        .challenge-top {
+          align-items: start;
+          flex-direction: column;
         }
       }
     </style>
   </head>
   <body>
     <main class="page">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">Placar automático</p>
-          <h1>Desafio Fitness Cardio</h1>
+      <header class="hero">
+        <div class="hero-content">
+          <p class="eyebrow">Central de desafios</p>
+          <h1>Desafios da Lulu</h1>
+          <p class="hero-copy">Acompanhe os desafios ativos e guarde o histórico dos desafios finalizados.</p>
         </div>
-        <div class="status" aria-live="polite">
-          <span class="pill" id="last-update">Última atualização: --</span>
-          <span class="pill" id="leader-name">Líder: --</span>
-        </div>
+        <div class="hero-photo" aria-label="Lulu"></div>
       </header>
 
-      <section class="dashboard">
-        <div class="ranking" id="ranking"></div>
+      <section class="section" aria-labelledby="active-title">
+        <div class="section-head">
+          <h2 id="active-title">Desafios ativos</h2>
+          <span class="count">0 ativos</span>
+        </div>
 
-        <aside class="side">
-          <section class="panel">
-            <h2>Resumo</h2>
-            <div class="stat-grid">
+        <div class="empty">Nenhum desafio ativo agora.</div>
+      </section>
+
+      <section class="section" aria-labelledby="finished-title">
+        <div class="section-head">
+          <h2 id="finished-title">Desafios finalizados</h2>
+          <span class="count">1 finalizado</span>
+        </div>
+
+        <div class="challenge-grid">
+          <article class="challenge-card">
+            <div class="challenge-top">
+              <h3>Desafio Fitness Cardio</h3>
+              <span class="badge">Finalizado</span>
+            </div>
+            <p>Placar final de minutos de cardio com vencedora, ranking e lançamentos.</p>
+            <p class="winner-line" id="card-winner">Vencedora: --</p>
+
+            <div class="stats" aria-label="Resumo do desafio finalizado">
               <div class="stat">
-                <b id="stat-students">0</b>
+                <b id="card-students">0</b>
                 <span>alunas</span>
               </div>
               <div class="stat">
-                <b id="stat-total">0 min</b>
-                <span>cardio total</span>
+                <b id="card-total">0 min</b>
+                <span>cardio</span>
               </div>
               <div class="stat">
-                <b id="stat-days">0</b>
-                <span>dias lançados</span>
+                <b id="card-days">0</b>
+                <span>dias</span>
               </div>
               <div class="stat">
-                <b id="stat-records">0</b>
+                <b id="card-records">0</b>
                 <span>registros</span>
               </div>
             </div>
-          </section>
 
-          <section class="panel">
-            <h2>Últimos lançamentos</h2>
-            <table class="log">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Aluna</th>
-                  <th>Tempo</th>
-                </tr>
-              </thead>
-              <tbody id="latest"></tbody>
-            </table>
-          </section>
-        </aside>
+            <a class="open-link" href="desafio-cardio.html">Abrir desafio</a>
+          </article>
+        </div>
       </section>
     </main>
 
     <script>
-      const DATA_FILE = "dados.js";
-      const REFRESH_SECONDS = 15;
-      const LAST_UPDATE = "2026-05-22T10:04:56";
-      let lastSignature = "";
-
-      function formatDateTime(value) {
-        const match = String(value || "").match(
-          /^(\d{4})-(\d{2})-(\d{2})(?:T|\s)(\d{2}):(\d{2})/,
-        );
-
-        if (match) {
-          const [, year, month, day, hour, minute] = match;
-          return `${day}/${month}/${year}, ${hour}:${minute}`;
-        }
-
-        const date = new Date(value);
-        if (Number.isNaN(date.getTime())) {
-          return "";
-        }
-        return new Intl.DateTimeFormat("pt-BR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }).format(date);
-      }
-
-      function renderLastUpdate(data = {}) {
-        const formattedDate = formatDateTime(data.ultimaAtualizacao || LAST_UPDATE);
-        document.querySelector("#last-update").textContent = formattedDate
-          ? `Última atualização: ${formattedDate}`
-          : "Última atualização: --";
-      }
-
       function formatMinutes(minutes) {
         const safeMinutes = Number(minutes) || 0;
         if (safeMinutes < 60) {
@@ -642,34 +416,7 @@
         return remaining ? `${hours}h ${remaining}min` : `${hours}h`;
       }
 
-      function formatDate(value) {
-        const parts = String(value).split("-");
-        if (parts.length !== 3) {
-          return value;
-        }
-
-        return `${parts[2]}/${parts[1]}`;
-      }
-
-      function initials(name) {
-        return String(name)
-          .trim()
-          .split(/\s+/)
-          .slice(0, 2)
-          .map((part) => part[0])
-          .join("")
-          .toUpperCase();
-      }
-
-      function photoMarkup(aluna) {
-        if (aluna.foto) {
-          return `<img src="${aluna.foto}" alt="Foto de ${aluna.nome}">`;
-        }
-
-        return `<span class="initials">${initials(aluna.nome)}</span>`;
-      }
-
-      function buildRanking(data) {
+      function renderChallengeSummary(data = { alunas: [], registros: [] }) {
         const totals = new Map(data.alunas.map((aluna) => [aluna.id, 0]));
 
         data.registros.forEach((record) => {
@@ -677,105 +424,32 @@
           totals.set(record.aluna, current + (Number(record.tempo) || 0));
         });
 
-        return data.alunas
+        const ranking = data.alunas
           .map((aluna) => ({
             ...aluna,
             total: totals.get(aluna.id) || 0,
           }))
           .sort((a, b) => b.total - a.total || a.nome.localeCompare(b.nome, "pt-BR"));
-      }
-
-      function render(data) {
-        const ranking = buildRanking(data);
-        const highest = Math.max(...ranking.map((item) => item.total), 1);
-        const rankingElement = document.querySelector("#ranking");
-        const latestElement = document.querySelector("#latest");
-        const totalMinutes = ranking.reduce((sum, aluna) => sum + aluna.total, 0);
+        const totalMinutes = data.registros.reduce(
+          (sum, record) => sum + (Number(record.tempo) || 0),
+          0,
+        );
         const days = new Set(data.registros.map((record) => record.data)).size;
-        const nameById = new Map(data.alunas.map((aluna) => [aluna.id, aluna.nome]));
 
-        if (!ranking.length) {
-          rankingElement.innerHTML = '<div class="empty">Cadastre as alunas no arquivo dados.js.</div>';
-        } else {
-          rankingElement.innerHTML = ranking
-            .map((aluna, index) => {
-              const percent = Math.max(4, Math.round((aluna.total / highest) * 100));
-
-              return `
-                <article class="leader">
-                  <div class="position">${index + 1}</div>
-                  <div class="person">
-                    <div class="photo">${photoMarkup(aluna)}</div>
-                    <div>
-                      <p class="name">${aluna.nome}</p>
-                      <div class="bar" aria-label="${aluna.nome}: ${aluna.total} minutos">
-                        <span style="--value: ${percent}%"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="total">
-                    <span class="minutes">${formatMinutes(aluna.total)}</span>
-                    <span class="hours">${aluna.total} minutos</span>
-                  </div>
-                </article>
-              `;
-            })
-            .join("");
-        }
-
-        latestElement.innerHTML = [...data.registros]
-          .sort((a, b) => String(b.data).localeCompare(String(a.data)))
-          .slice(0, 10)
-          .map(
-            (record) => `
-              <tr>
-                <td>${formatDate(record.data)}</td>
-                <td>${nameById.get(record.aluna) || record.aluna}</td>
-                <td>${formatMinutes(Number(record.tempo) || 0)}</td>
-              </tr>
-            `,
-          )
-          .join("");
-
-        document.querySelector("#stat-students").textContent = data.alunas.length;
-        document.querySelector("#stat-total").textContent = formatMinutes(totalMinutes);
-        document.querySelector("#stat-days").textContent = days;
-        document.querySelector("#stat-records").textContent = data.registros.length;
-        document.querySelector("#leader-name").textContent = ranking[0]
-          ? `Líder: ${ranking[0].nome}`
-          : "Líder: --";
+        document.querySelector("#card-winner").textContent = ranking[0]
+          ? `Vencedora: ${ranking[0].nome} com ${formatMinutes(ranking[0].total)}`
+          : "Vencedora: --";
+        document.querySelector("#card-students").textContent = data.alunas.length;
+        document.querySelector("#card-total").textContent = formatMinutes(totalMinutes);
+        document.querySelector("#card-days").textContent = days;
+        document.querySelector("#card-records").textContent = data.registros.length;
       }
 
-      function loadData() {
-        const previousScript = document.querySelector("[data-score-data]");
-        if (previousScript) {
-          previousScript.remove();
-        }
-
-        const script = document.createElement("script");
-        script.src = `${DATA_FILE}?v=${Date.now()}`;
-        script.dataset.scoreData = "true";
-        script.onload = () => {
-          const data = window.desafioFitness || { alunas: [], registros: [] };
-          const signature = JSON.stringify(data);
-
-          renderLastUpdate(data);
-
-          if (signature !== lastSignature) {
-            lastSignature = signature;
-            render(data);
-          }
-        };
-        script.onerror = () => {
-          document.querySelector("#ranking").innerHTML =
-            '<div class="empty">Não consegui carregar o arquivo dados.js.</div>';
-        };
-        document.body.appendChild(script);
-      }
-
-      renderLastUpdate();
-      loadData();
-      window.setInterval(loadData, REFRESH_SECONDS * 1000);
+      const script = document.createElement("script");
+      script.src = `dados.js?v=${Date.now()}`;
+      script.onload = () => renderChallengeSummary(window.desafioFitness);
+      script.onerror = () => renderChallengeSummary();
+      document.body.appendChild(script);
     </script>
   </body>
 </html>
